@@ -1,0 +1,52 @@
+$schema: https://azuremlschemas.azureedge.net/promptflow/latest/Flow.schema.json
+environment:
+  python_requirements_txt: requirements.txt
+inputs:
+  question:
+    type: string
+    default: Qual o prazo de entrega para brasilia?
+  question2:
+    type: string
+    default: Quem nasceu primeiro o ovo ou a galinha?
+outputs:
+  output_prompt:
+    type: string
+    reference: ${echo_response.output}
+  output_prompt2:
+    type: string
+    reference: ${openai_test.output}
+nodes:
+- name: prepare_prompt2
+  type: python
+  source:
+    type: code
+    path: prepare_prompt2.py
+  inputs:
+    question2: ${inputs.question2}
+- name: openai_test
+  type: custom_llm
+  source:
+    type: package_with_prompt
+    tool: promptflow.tools.llm.llm
+    path: openai_test.jinja2
+  inputs:
+    connection: OpenAIConnection
+    api: chat
+    question: ${prepare_prompt2.output}
+    model: gpt-3.5-turbo
+    temperature: 0.7
+- name: prepare_prompt
+  type: python
+  source:
+    type: code
+    path: prepare_prompt.py
+  inputs:
+    question: ${inputs.question}
+  aggregation: false
+- name: echo_response
+  type: python
+  source:
+    type: code
+    path: echo_response.py
+  inputs:
+    prepared_prompt: ${prepare_prompt.output}
