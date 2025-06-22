@@ -32,24 +32,34 @@ pipeline_test_llm/
     └── __pycache__/            # Cache de execução Python
 ```
 
+## Pré-requisitos
+
+Para executar este pipeline, é necessário:
+
+- Ter o **Miniconda** instalado (para gerenciar ambientes Python de forma isolada).
+- Instalar a extensão **PromptFlow** e suas dependências:
+  - Você pode instalar via `pip install promptflow` dentro do ambiente conda.
+- (Opcional, mas recomendado para cenários em nuvem) Ter a **Azure CLI** instalada e configurada.
+
 ## Como usar
 
-### 1. Instale as dependências
+### 1. Instale as dependências do fluxo
 ```bash
-conda run -p /home/edu/miniconda3 pip install -r simple_joke/requirements.txt
+conda create -n promptflow_env python=3.10 -y
+conda activate promptflow_env
+pip install -r basic_flow/requirements.txt
 ```
 
-### 2. Execute o MLflow UI
-```bash
-mlflow ui --host 0.0.0.0 --port 5000
-```
+### 2. Execute o pipeline localmente
 
-### 3. Execute o fluxo de teste e logging
-```bash
-conda run -p /home/edu/miniconda3 python simple_joke/mlflow_test_run.py
-```
+Você pode rodar os scripts Python individualmente para testar cada nó, ou utilizar o PromptFlow para executar o fluxo completo:
 
-Acesse a interface do MLflow em: [http://localhost:5000](http://localhost:5000)
+```bash
+# Exemplo: rodando um nó isolado
+python basic_flow/prepare_prompt.py
+
+# Para executar o fluxo completo, utilize o PromptFlow CLI (consulte a documentação oficial para detalhes de uso)
+```
 
 ## Boas práticas
 - Nunca suba arquivos sensíveis como `.env` ou bancos de dados locais para o git.
