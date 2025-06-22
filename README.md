@@ -1,21 +1,35 @@
-# QA Testing AI
+# QA Testing LLM com PromptFlow
 
-Projeto para automação, rastreamento e análise de fluxos de testes de IA utilizando PromptFlow e.
+Projeto para automação, rastreamento e análise de fluxos de testes de LLM (Large Language Models) como um engenheiro de QA, utilizando PromptFlow para orquestrar e visualizar cada etapa do processo.
 
 ## Visão Geral
-Este repositório foi criado para facilitar o desenvolvimento, execução e rastreamento de experimentos de IA, com foco em fluxos de geração de piadas e integração robusta com MLflow para logging de parâmetros, métricas e artefatos.
+Este repositório foi criado para facilitar o desenvolvimento, execução e rastreamento de experimentos de QA em LLMs, permitindo quebrar o processo em estações de trabalho (nós), de forma clara e modular:
+
+- **Nó 1:** Prepara a matéria-prima (ex: formata a pergunta do usuário).
+- **Nó 2:** Envia para a máquina principal (ex: chama o LLM).
+- **Nó 3:** Inspeciona a qualidade do produto (ex: avalia se a resposta é tóxica).
+- **Nó 4:** Registra o resultado.
+
+A grande vantagem do PromptFlow é a clareza visual, a reutilização de cada "estação" e a capacidade de processar lotes gigantescos de testes de uma só vez, algo essencial para QA de LLMs.
 
 ## Estrutura do Projeto
+
 ```
-QA_testing_AI/
+pipeline_test_llm/
+├── README.md
 ├── check_env.py                # Script de verificação do ambiente
-├── mlruns/                     # Diretório de experimentos do MLflow (ignorado pelo git)
-├── simple_joke/
-│   ├── hello.py                # Exemplo de fluxo PromptFlow
-│   ├── mlflow_test_run.py      # Script de logging e integração com MLflow
-│   ├── requirements.txt        # Dependências do projeto
-│   └── ...
-└── ...
+└── basic_flow/                 # Fluxo principal de testes com PromptFlow
+    ├── requirements.txt        # Dependências do fluxo
+    ├── flow.dag.yaml           # Definição do pipeline (DAG) do PromptFlow
+    ├── data.jsonl              # Dados de entrada para testes em lote
+    ├── hello.py                # Exemplo de nó Python
+    ├── prepare_prompt.py       # Nó: prepara a pergunta do usuário
+    ├── prepare_prompt2.py      # Nó: prepara uma segunda pergunta
+    ├── echo_response.py        # Nó: simula resposta do LLM
+    ├── hello.jinja2            # Template de prompt
+    ├── openai_test.jinja2      # Template para chamada do LLM
+    ├── prompt_01.jinja2        # Outro template de prompt
+    └── __pycache__/            # Cache de execução Python
 ```
 
 ## Como usar
